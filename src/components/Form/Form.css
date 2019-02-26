@@ -1,0 +1,9 @@
+.login-form {
+    max-width: 300px;
+    margin: auto;
+    padding-top: 300px;
+}
+
+.login-form-button {
+    width: 100%;
+}

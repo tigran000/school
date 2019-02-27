@@ -33,6 +33,7 @@ class NormalLoginForm extends React.Component {
     this.props.form.validateFields(async (err, credentials) => {
       if (!err) {
         const { data: { token, user } } = await axios.post(URL + "login", { credentials })
+        console.log(user)
         if (user) {
 
           localStorage.setItem('token', token)

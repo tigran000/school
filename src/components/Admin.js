@@ -9,31 +9,23 @@ class Admin extends React.Component {
     }
 
     async componentDidMount() {
-        if (!this.props.location.state) { // ete state unes el petq chi
-            if (localStorage.getItem('token')) {
-                const AuthStr = 'Bearer '.concat(localStorage.getItem('token'));
-                const { data: { user } } = await axios.get(URL, { headers: { Authorization: AuthStr } })
-                if (user.isAdmin) {
-                    this.setState({ user })
-                } else {
-                    this.props.history.push('/login')
-                }
-            } else {
-                this.props.history.push('/login')
-            }
-        } else if (this.props.location.state.isAdmin && localStorage.getItem('token')) {
+        if (this.props.location.state && localStorage.getItem('token')) {
             this.setState({
                 user: this.props.location.state
             })
+        } else if (localStorage.getItem('token')) {
+            const AuthStr = 'Bearer '.concat(localStorage.getItem('token'));
+            const { data: { user } } = await axios.get(URL, { headers: { Authorization: AuthStr } })
+            user.isAdmin ? this.setState({ user }) : this.props.history.push('/login')
         } else {
-            this.props.history.push('/login')
+            this.logOut()
         }
     }
 
 
     logOut = () => {
-        this.props.history.push('/login')
         localStorage.removeItem('token');
+        this.props.history.push('/login')
     }
 
     render() {

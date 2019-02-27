@@ -5,18 +5,34 @@ import {
   Form, Icon, Input, Button
 } from 'antd';
 import './Form.css';
-const URL = "http://localhost:8000/login"
+const URL = "http://localhost:8000/"
 
 
 
 class NormalLoginForm extends React.Component {
 
+  state = {
+    laoding: true
+  }
+
+  async componentDidMount() {
+
+    if (localStorage.getItem('token')) {
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('token'));
+      const { data: { user } } = await axios.get(URL + "profile", { headers: { Authorization: AuthStr } })
+      user.isAdmin ? this.props.history.push('/admin', user) :
+        this.props.history.push('/teacher', user)
+    } else {
+      this.setState({ laoding: false })
+    }
+
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields(async (err, credentials) => {
       if (!err) {
-        const { data: { token, user } } = await axios.post(URL, { credentials })
-        console.log(token, user)
+        const { data: { token, user } } = await axios.post(URL + "login", { credentials })
         if (user) {
 
           localStorage.setItem('token', token)
@@ -38,10 +54,18 @@ class NormalLoginForm extends React.Component {
 
 
   render() {
-
     const { getFieldDecorator } = this.props.form;
+
+    if (this.state.laoding) {
+      return (
+        <div>
+          Loading...555
+        </div>
+      )
+    }
+
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
+      <Form onSubmit={this.handleSubmit} className="login-form" >
         <Form.Item>
           {getFieldDecorator('userName', {
             rules: [{ required: true, message: 'Please input your username!' }],

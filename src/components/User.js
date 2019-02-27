@@ -9,22 +9,31 @@ class User extends React.Component {
     }
 
     async componentDidMount() {
-        if (!this.props.location.state) {
-            console.log('no request')
+        console.log(this.props.location.state)
+        if (!this.props.location.state) {  // ete state unes el petq chi
             if (localStorage.getItem('token')) {
                 const AuthStr = 'Bearer '.concat(localStorage.getItem('token'));
                 const { data: { user } } = await axios.get(URL, { headers: { Authorization: AuthStr } })
-                this.setState({ user })
+                console.log(user)
+                if (user.isAdmin) {
+                    this.props.history.push('/login')
+                } else {
+                    this.setState({ user })
+                }
             } else {
                 this.props.history.push('/login')
             }
-        } else {
+        } else if (!this.props.location.state.isAdmin && localStorage.getItem('token')) {
             this.setState({
                 user: this.props.location.state
             })
+        } else {
+            this.props.history.push('/login')
         }
+
+
     }
-    
+
     logOut = () => {
         this.props.history.push('/login')
         localStorage.removeItem('token');

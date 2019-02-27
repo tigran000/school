@@ -16,14 +16,14 @@ class User extends React.Component {
         } else if (localStorage.getItem('token')) {
             const AuthStr = 'Bearer '.concat(localStorage.getItem('token'));
             const { data: { user } } = await axios.get(URL, { headers: { Authorization: AuthStr } })
-            user.isAdmin ? this.props.history.push('/login') : this.setState({ user })
+            user.isAdmin ? this.props.history.push('/') : this.setState({ user })
         } else {
-            this.props.history.push('/login')
+            this.props.history.push('/')
         }
     }
 
     logOut = () => {
-        this.props.history.push('/login')
+        this.props.history.push('/')
         localStorage.removeItem('token');
     }
 

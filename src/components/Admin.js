@@ -16,7 +16,7 @@ class Admin extends React.Component {
         } else if (localStorage.getItem('token')) {
             const AuthStr = 'Bearer '.concat(localStorage.getItem('token'));
             const { data: { user } } = await axios.get(URL, { headers: { Authorization: AuthStr } })
-            user.isAdmin ? this.setState({ user }) : this.props.history.push('/login')
+            user.isAdmin ? this.setState({ user }) : this.props.history.push('/')
         } else {
             this.logOut()
         }
@@ -25,7 +25,7 @@ class Admin extends React.Component {
 
     logOut = () => {
         localStorage.removeItem('token');
-        this.props.history.push('/login')
+        this.props.history.push('/')
     }
 
     render() {

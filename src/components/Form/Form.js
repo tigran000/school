@@ -7,8 +7,6 @@ import {
 import './Form.css';
 const URL = "http://localhost:8000/"
 
-
-
 class NormalLoginForm extends React.Component {
 
   state = {
@@ -25,22 +23,18 @@ class NormalLoginForm extends React.Component {
     } else {
       this.setState({ laoding: false })
     }
-
   }
 
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields(async (err, credentials) => {
       if (!err) {
-        const { data: { token, user } } = await axios.post(URL + "login", { credentials })
-        console.log(user)
-        if (user) {
-
+        try {
+          const { data: { token, user } } = await axios.post(URL + "login", { credentials })
           localStorage.setItem('token', token)
-
           user.isAdmin ? this.props.history.push('/admin', user) :
             this.props.history.push('/teacher', user)
-        } else {
+        } catch (error) {
           Swal.fire({
             title: 'Error!',
             text: 'Wrong credentials',
@@ -56,15 +50,13 @@ class NormalLoginForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-
     if (this.state.laoding) {
       return (
         <div>
-          Loading...555
+          Loading...
         </div>
       )
     }
-
     return (
       <Form onSubmit={this.handleSubmit} className="login-form" >
         <Form.Item>

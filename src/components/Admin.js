@@ -1,21 +1,20 @@
 import React from 'react';
 import axios from 'axios';
-const URL = "http://localhost:8000/profile";
+const URL = "http://localhost:8000/";
 
 class Admin extends React.Component {
 
     state = {
-        user: undefined
+        user: this.props.location.state
     }
 
     async componentDidMount() {
-        if (this.props.location.state && localStorage.getItem('token')) {
-            this.setState({
-                user: this.props.location.state
-            })
+        if (this.state.user && localStorage.getItem('token')) {
+            const { user } = this.state
+            this.setState({ user })
         } else if (localStorage.getItem('token')) {
-            const AuthStr = 'Bearer '.concat(localStorage.getItem('token'));
-            const { data: { user } } = await axios.get(URL, { headers: { Authorization: AuthStr } })
+            const Authorization = 'Bearer '.concat(localStorage.getItem('token'));
+            const { data: { user } } = await axios.get(URL + 'profile', { headers: { Authorization } })
             user.isAdmin ? this.setState({ user }) : this.props.history.push('/')
         } else {
             this.logOut()
@@ -27,7 +26,6 @@ class Admin extends React.Component {
         localStorage.removeItem('token');
         this.props.history.push('/')
     }
-
     render() {
         if (this.state.user) {
             return (
@@ -37,13 +35,12 @@ class Admin extends React.Component {
                     <button onClick={this.logOut}> Log out </button>
                 </div>
             )
-        } else {
-            return (
-                <div>
-                    Loading...
-                </div>
-            )
         }
+        return (
+             <div>
+                 Loading...
+            </div>
+        )
     }
 }
 

@@ -6,7 +6,7 @@ import {
 } from 'antd';
 
 import { getJwt } from '../../helpers/jwt';
-import {URL} from '../../helpers/url';
+import { URL } from '../../helpers/url';
 import './Form.css';
 
 class NormalLoginForm extends React.Component {

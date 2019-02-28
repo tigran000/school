@@ -12,21 +12,21 @@ class Admin extends React.Component {
 
     async componentDidMount() {
         if (this.state.user && getJwt()) {
-            const { user } = this.state
-            this.setState({ user })
+            const { user } = this.state;
+            this.setState({ user });
         } else if (getJwt()) {
             const Authorization = 'Bearer '.concat(getJwt());
-            const { data: { user } } = await axios.get(URL + 'profile', { headers: { Authorization } })
-            user.isAdmin ? this.setState({ user }) : this.props.history.push('/')
+            const { data: { user } } = await axios.get(URL + 'profile', { headers: { Authorization } });
+            user.isAdmin ? this.setState({ user }) : this.props.history.push('/');
         } else {
-            this.logOut()
+            this.logOut();
         }
     }
 
 
     logOut = () => {
         localStorage.removeItem('token');
-        this.props.history.push('/')
+        this.props.history.push('/');
     }
     render() {
         if (this.state.user) {

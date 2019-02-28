@@ -19,11 +19,11 @@ class NormalLoginForm extends React.Component {
 
     if (getJwt()) {
       const AuthStr = 'Bearer '.concat(localStorage.getItem('token'));
-      const { data: { user } } = await axios.get(URL + "profile", { headers: { Authorization: AuthStr } })
+      const { data: { user } } = await axios.get(URL + "profile", { headers: { Authorization: AuthStr } });
       user.isAdmin ? this.props.history.push('/admin', user) :
-        this.props.history.push('/teacher', user)
+        this.props.history.push('/teacher', user);
     } else {
-      this.setState({ laoding: false })
+      this.setState({ laoding: false });
     }
   }
 
@@ -32,18 +32,18 @@ class NormalLoginForm extends React.Component {
     this.props.form.validateFields(async (err, credentials) => {
       if (!err) {
         try {
-          const { data: { token, user } } = await axios.post(URL + "login", { credentials })
-          localStorage.setItem('token', token)
+          const { data: { token, user } } = await axios.post(URL + "login", { credentials });
+          localStorage.setItem('token', token);
           user.isAdmin ? this.props.history.push('/admin', user) :
-            this.props.history.push('/teacher', user)
+            this.props.history.push('/teacher', user);
         } catch (error) {
           Swal.fire({
             title: 'Error!',
             text: 'Wrong credentials',
             type: 'error',
             confirmButtonText: 'Okay'
-          })
-          this.props.form.resetFields()
+          });
+          this.props.form.resetFields();
         }
       }
     });
